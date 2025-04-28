@@ -80,6 +80,11 @@ body {
 
 }
 
+
+.result-section{
+  width:100%;
+  display:flex;
+}
 .result-section p {
 
   margin: 10px 0;
