@@ -1,93 +1,63 @@
 function drawWalls() {
-
   const numWalls = parseInt(document.getElementById('numWalls').value);
-
   const heightsInput = document.getElementById('wallHeights').value;
-
   const wallsContainer = document.getElementById('wallsContainer');
-
-  const visibleLeftText = document.getElementById('visibleLeft');
-
-  const visibleRightText = document.getElementById('visibleRight');
+  const visibleLeft = document.getElementById('visibleLeft');
+  const visibleRight = document.getElementById('visibleRight');
 
   if (isNaN(numWalls) || numWalls <= 0) {
-
     alert('Please enter a valid number of walls.');
-
     return;
-
   }
 
   const heights = heightsInput.split('#').map(Number);
 
   if (heights.length !== numWalls || heights.some(h => isNaN(h) || h < 0)) {
-
-    alert('Please enter correct number of heights (positive integers) separated by #.');
-
+    alert('Please enter correct number of heights separated by #.');
     return;
-
   }
-
-  // Clear previous walls
 
   wallsContainer.innerHTML = '';
 
-  // Find maximum height for scaling
-
   const maxHeight = Math.max(...heights);
 
-  // Draw the walls
-
   heights.forEach(height => {
+    const wallContainer = document.createElement('div');
+    wallContainer.className = 'wall-container';
 
     const wall = document.createElement('div');
-
     wall.className = 'wall';
-
-    wall.style.height = (height / maxHeight) * 100 + '%';
-
+    wall.style.height = (height / maxHeight) * 200 + 'px'; // scale height
     wall.innerText = height;
 
-    wallsContainer.appendChild(wall);
+    const label = document.createElement('div');
+    label.className = 'height-label';
+    label.innerText = height;
 
+    wallContainer.appendChild(wall);
+    wallContainer.appendChild(label);
+    wallsContainer.appendChild(wallContainer);
   });
 
-  // Calculate visibility
-
+  // Visibility calculation
   let visibleFromLeft = 0;
-
-  let highestLeft = -1;
-
+  let maxLeft = -1;
   for (let h of heights) {
-
-    if (h > highestLeft) {
-
+    if (h > maxLeft) {
       visibleFromLeft++;
-
-      highestLeft = h;
-
+      maxLeft = h;
     }
-
   }
 
   let visibleFromRight = 0;
-
-  let highestRight = -1;
-
+  let maxRight = -1;
   for (let i = heights.length - 1; i >= 0; i--) {
-
-    if (heights[i] > highestRight) {
-
+    if (heights[i] > maxRight) {
       visibleFromRight++;
-
-      highestRight = heights[i];
-
+      maxRight = heights[i];
     }
-
   }
 
-  visibleLeftText.innerText = `Walls visible from Left: ${visibleFromLeft}`;
-
-  visibleRightText.innerText = `Walls visible from Right: ${visibleFromRight}`;
-
+  visibleLeft.innerText = visibleFromLeft;
+  visibleRight.innerText = visibleFromRight;
 }
